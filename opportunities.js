@@ -145,6 +145,20 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+// 5. DELETE
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const id = parseId(req, res);
+    if (id === null) return;
+
+    await pool.query('DELETE FROM opportunities WHERE id = ?', [id]);
+    res.status(200).json({ message: 'Opportunity deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
+
 
 
