@@ -33,6 +33,40 @@ function validate(data) {
   return errors;
 }
 
+// 1. CREATE
+router.post('/', async (req, res, next) => {
+  try {
+    const data = { status: 'Open', ...req.body };
+    const errors = validate(data);
+    if (errors.length) {
+      return res.status(400).json({ message: 'Validation failed', errors });
+    }
+
+    const [result] = await pool.query(
+      `INSERT INTO opportunities
+       (title, description, research_area, faculty_name, department,
+        required_skills, positions, deadline, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        data.title.trim(),
+        data.description.trim(),
+        data.research_area.trim(),
+        data.faculty_name.trim(),
+        data.department.trim(),
+        data.required_skills.trim(),
+        Number(data.positions),
+        data.deadline,
+        data.status,
+      ]
+    );
+
+    const [rows] = await pool.query('SELECT * FROM opportunities WHERE id = ?', [result.insertId]);
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // 2. READ ALL
 router.get('/', async (req, res, next) => {
   try {
