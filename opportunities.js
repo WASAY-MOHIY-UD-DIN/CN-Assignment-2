@@ -102,5 +102,49 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// 4. UPDATE (partial fields bhi chalengi, e.g. sirf status)
+router.put('/:id', async (req, res, next) => {
+  try {
+    const id = parseId(req, res);
+    if (id === null) return;
+
+    const [rows] = await pool.query('SELECT * FROM opportunities WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Opportunity not found' });
+    }
+
+    const merged = { ...rows[0], ...req.body };
+    const errors = validate(merged);
+    if (errors.length) {
+      return res.status(400).json({ message: 'Validation failed', errors });
+    }
+
+    await pool.query(
+      `UPDATE opportunities SET
+        title = ?, description = ?, research_area = ?, faculty_name = ?,
+        department = ?, required_skills = ?, positions = ?, deadline = ?, status = ?
+       WHERE id = ?`,
+      [
+        merged.title.trim(),
+        merged.description.trim(),
+        merged.research_area.trim(),
+        merged.faculty_name.trim(),
+        merged.department.trim(),
+        merged.required_skills.trim(),
+        Number(merged.positions),
+        merged.deadline,
+        merged.status,
+        id,
+      ]
+    );
+
+    const [updated] = await pool.query('SELECT * FROM opportunities WHERE id = ?', [id]);
+    res.status(200).json(updated[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
+
 
