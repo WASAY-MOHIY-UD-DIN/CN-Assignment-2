@@ -77,4 +77,30 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+function parseId(req, res) {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    res.status(400).json({ message: 'Invalid ID' });
+    return null;
+  }
+  return id;
+}
+
+// 3. READ ONE
+router.get('/:id', async (req, res, next) => {
+  try {
+    const id = parseId(req, res);
+    if (id === null) return;
+
+    const [rows] = await pool.query('SELECT * FROM opportunities WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Opportunity not found' });
+    }
+    res.status(200).json(rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
+
