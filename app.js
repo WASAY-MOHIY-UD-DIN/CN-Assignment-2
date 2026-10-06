@@ -108,4 +108,26 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
+async function editOpportunity(id) {
+  try {
+    const o = await request(`${API}/${id}`);
+    form.reset();
+    form.classList.remove('was-validated');
+    document.getElementById('opp-id').value = o.id;
+    document.getElementById('form-title').textContent = 'Edit Opportunity';
+    document.getElementById('title').value = o.title;
+    document.getElementById('description').value = o.description;
+    document.getElementById('research_area').value = o.research_area;
+    document.getElementById('faculty_name').value = o.faculty_name;
+    document.getElementById('department').value = o.department;
+    document.getElementById('required_skills').value = o.required_skills;
+    document.getElementById('positions').value = o.positions;
+    document.getElementById('deadline').value = o.deadline;
+    document.getElementById('status').value = o.status;
+    formModal.show();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadOpportunities);
