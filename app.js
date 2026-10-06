@@ -76,4 +76,36 @@ document.getElementById('btn-new').addEventListener('click', () => {
   formModal.show();
 });
 
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!form.checkValidity()) {
+    form.classList.add('was-validated');
+    return;
+  }
+  const id = document.getElementById('opp-id').value;
+  const body = {
+    title: document.getElementById('title').value.trim(),
+    description: document.getElementById('description').value.trim(),
+    research_area: document.getElementById('research_area').value.trim(),
+    faculty_name: document.getElementById('faculty_name').value.trim(),
+    department: document.getElementById('department').value.trim(),
+    required_skills: document.getElementById('required_skills').value.trim(),
+    positions: Number(document.getElementById('positions').value),
+    deadline: document.getElementById('deadline').value,
+    status: document.getElementById('status').value,
+  };
+
+  try {
+    if (id) {
+      await request(`${API}/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+    } else {
+      await request(API, { method: 'POST', body: JSON.stringify(body) });
+    }
+    formModal.hide();
+    loadOpportunities();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 document.addEventListener('DOMContentLoaded', loadOpportunities);
