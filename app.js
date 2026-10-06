@@ -130,4 +130,27 @@ async function editOpportunity(id) {
   }
 }
 
+async function closeOpportunity(id) {
+  if (!confirm('Mark this opportunity as Closed?')) return;
+  try {
+    await request(`${API}/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status: 'Closed' }),
+    });
+    loadOpportunities();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function deleteOpportunity(id) {
+  if (!confirm('Are you sure you want to delete this opportunity?')) return;
+  try {
+    await request(`${API}/${id}`, { method: 'DELETE' });
+    loadOpportunities();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadOpportunities);
