@@ -41,4 +41,28 @@ async function loadOpportunities() {
   }
 }
 
+const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+
+async function viewOpportunity(id) {
+  try {
+    const o = await request(`${API}/${id}`);
+    document.getElementById('detail-body').innerHTML = `
+      <dl class="row mb-0">
+        <dt class="col-sm-4">ID</dt><dd class="col-sm-8">${o.id}</dd>
+        <dt class="col-sm-4">Title</dt><dd class="col-sm-8">${o.title}</dd>
+        <dt class="col-sm-4">Description</dt><dd class="col-sm-8">${o.description}</dd>
+        <dt class="col-sm-4">Research Area</dt><dd class="col-sm-8">${o.research_area}</dd>
+        <dt class="col-sm-4">Faculty Member</dt><dd class="col-sm-8">${o.faculty_name}</dd>
+        <dt class="col-sm-4">Department</dt><dd class="col-sm-8">${o.department}</dd>
+        <dt class="col-sm-4">Required Skills</dt><dd class="col-sm-8">${o.required_skills}</dd>
+        <dt class="col-sm-4">Positions</dt><dd class="col-sm-8">${o.positions}</dd>
+        <dt class="col-sm-4">Deadline</dt><dd class="col-sm-8">${o.deadline}</dd>
+        <dt class="col-sm-4">Status</dt><dd class="col-sm-8">${o.status}</dd>
+      </dl>`;
+    detailModal.show();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadOpportunities);
