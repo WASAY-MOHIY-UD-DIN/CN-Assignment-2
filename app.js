@@ -65,4 +65,15 @@ async function viewOpportunity(id) {
   }
 }
 
+const formModal = new bootstrap.Modal(document.getElementById('formModal'));
+const form = document.getElementById('opp-form');
+
+document.getElementById('btn-new').addEventListener('click', () => {
+  form.reset();
+  form.classList.remove('was-validated');
+  document.getElementById('opp-id').value = '';
+  document.getElementById('form-title').textContent = 'New Opportunity';
+  formModal.show();
+});
+
 document.addEventListener('DOMContentLoaded', loadOpportunities);
