@@ -71,6 +71,6 @@ Import `research-opportunity-portal.postman_collection.json` into Postman. Set `
 - Add the approximately one-minute demonstration video link after recording and uploading the required demo.
 - Include the code, schema, collection, README, repository link, and video or video link in the ZIP named `P24 0000 NAME CLASS.zip`, replacing the example identity with your assigned details.
 
-**GitHub repository:** `ADD_REPOSITORY_URL`
+**GitHub repository:** `https://github.com/WASAY-MOHIY-UD-DIN/CN-Assignment-2`
 
 **Demonstration video:** `ADD_DEMO_VIDEO_URL`
