@@ -2,13 +2,11 @@
 
 A small web application for managing university research opportunities. The Node.js and Express server serves the frontend and exposes a REST API backed by MySQL.
 
-## Assignment deliverables
 
-- Backend source: `server.js`, `db.js`, and `opportunities.js`
-- Frontend source: `index.html`, `app.js`, and `style.css`
-- MySQL setup: `schema.sql`
-- API requests: `research-opportunity-portal.postman_collection.json`
-- Assignment brief: `BCS-5A(Assignment01).pdf`
+## Student Details
+
+- **Name:** Wasay Mohiyud din
+- **Roll Number:** 22P-9355
 
 ## Requirements
 
@@ -64,15 +62,3 @@ Each opportunity has a unique ID, title, description, research area, faculty nam
 ## API collection
 
 Import `research-opportunity-portal.postman_collection.json` into Postman. Set `baseUrl` to `http://localhost:3000` if needed. The collection includes three create requests, list and detail requests, an update, a close request, a delete followed by a lookup of the deleted record, and an invalid-data request. Run the create requests first; the remaining sample requests use IDs `1` and `3` and may need those IDs changed to match the records in your local database.
-
-## Student Details
-
-- **Name:** Wasay Mohiyud din
-- **Roll Number:** 22P-9355
-- **Completion Status:** Completed
-
-## Submission Details
-
-- **GitHub repository:** `https://github.com/WASAY-MOHIY-UD-DIN/CN-Assignment-2`
-- **Demonstration video:** `ADD_DEMO_VIDEO_URL`
-- **Submission ZIP:** `22P 9355 Wasay Mohiyud din BCS-5A.zip`
