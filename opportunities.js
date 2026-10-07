@@ -11,26 +11,62 @@ const TEXT_FIELDS = [
   'required_skills',
 ];
 
+const TEXT_FIELD_LIMITS = {
+  title: 255,
+  research_area: 100,
+  faculty_name: 100,
+  department: 100,
+  required_skills: 500,
+};
+
 function validate(data) {
   const errors = [];
-  if (!data || typeof data !== 'object') {
+
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
     return ['Request body must be a JSON object'];
   }
+
   for (const f of TEXT_FIELDS) {
-    if (!data[f] || typeof data[f] !== 'string' || data[f].trim() === '') {
+    if (typeof data[f] !== 'string' || data[f].trim() === '') {
       errors.push(`${f} is required`);
+    } else if (TEXT_FIELD_LIMITS[f] && data[f].trim().length > TEXT_FIELD_LIMITS[f]) {
+      errors.push(`${f} must be at most ${TEXT_FIELD_LIMITS[f]} characters`);
     }
   }
-  if (!data.positions || Number(data.positions) < 1) {
+
+  const pos = Number(data.positions);
+  if (data.positions === undefined || data.positions === null || data.positions === '' ||
+      !Number.isInteger(pos) || pos < 1 || pos > 2147483647) {
     errors.push('positions must be a whole number of at least 1');
   }
-  if (!data.deadline) {
+
+  const deadline = typeof data.deadline === 'string' ? data.deadline : '';
+  const deadlineParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(deadline);
+  const validDeadline = deadlineParts && (() => {
+    const [, year, month, day] = deadlineParts.map(Number);
+    if (year < 1000) return false;
+    const parsed = new Date(Date.UTC(year, month - 1, day));
+    return parsed.getUTCFullYear() === year &&
+      parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
+  })();
+  if (!validDeadline) {
     errors.push('deadline is required in YYYY-MM-DD format');
   }
+
   if (!['Open', 'Closed'].includes(data.status)) {
     errors.push("status must be 'Open' or 'Closed'");
   }
+
   return errors;
+}
+
+function parseId(req, res) {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    res.status(400).json({ message: 'Invalid ID' });
+    return null;
+  }
+  return id;
 }
 
 // 1. CREATE
@@ -76,15 +112,6 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
-
-function parseId(req, res) {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id < 1) {
-    res.status(400).json({ message: 'Invalid ID' });
-    return null;
-  }
-  return id;
-}
 
 // 3. READ ONE
 router.get('/:id', async (req, res, next) => {
@@ -151,7 +178,10 @@ router.delete('/:id', async (req, res, next) => {
     const id = parseId(req, res);
     if (id === null) return;
 
-    await pool.query('DELETE FROM opportunities WHERE id = ?', [id]);
+    const [result] = await pool.query('DELETE FROM opportunities WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Opportunity not found' });
+    }
     res.status(200).json({ message: 'Opportunity deleted successfully' });
   } catch (err) {
     next(err);
@@ -159,6 +189,3 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 module.exports = router;
-
-
-
