@@ -65,12 +65,14 @@ Each opportunity has a unique ID, title, description, research area, faculty nam
 
 Import `research-opportunity-portal.postman_collection.json` into Postman. Set `baseUrl` to `http://localhost:3000` if needed. The collection includes three create requests, list and detail requests, an update, a close request, a delete followed by a lookup of the deleted record, and an invalid-data request. Run the create requests first; the remaining sample requests use IDs `1` and `3` and may need those IDs changed to match the records in your local database.
 
-## Submission items to complete
+## Student Details
 
-- Replace the repository link below with the accessible GitHub repository URL after creating and pushing the repository.
-- Add the approximately one-minute demonstration video link after recording and uploading the required demo.
-- Include the code, schema, collection, README, repository link, and video or video link in the ZIP named `P24 0000 NAME CLASS.zip`, replacing the example identity with your assigned details.
+- **Name:** Wasay Mohiyud din
+- **Roll Number:** 22P-9355
+- **Completion Status:** Completed
 
-**GitHub repository:** `https://github.com/WASAY-MOHIY-UD-DIN/CN-Assignment-2`
+## Submission Details
 
-**Demonstration video:** `ADD_DEMO_VIDEO_URL`
+- **GitHub repository:** `https://github.com/WASAY-MOHIY-UD-DIN/CN-Assignment-2`
+- **Demonstration video:** `ADD_DEMO_VIDEO_URL`
+- **Submission ZIP:** `22P 9355 Wasay Mohiyud din BCS-5A.zip`
